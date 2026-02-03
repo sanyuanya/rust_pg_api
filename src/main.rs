@@ -1,13 +1,13 @@
 use axum::{
+    Json, Router,
     extract::{Path, State},
     http::StatusCode,
     response::{IntoResponse, Response},
     routing::{delete, get, patch, post},
-    Json, Router,
 };
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgPoolOptions, PgPool};
+use sqlx::{PgPool, postgres::PgPoolOptions};
 use std::net::SocketAddr;
 use tracing_subscriber::EnvFilter;
 
@@ -83,7 +83,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = Router::new()
         .route("/health", get(health))
         .route("/todos", get(list_todos).post(create_todo))
-        .route("/todos/:id", get(get_todo).patch(update_todo).delete(delete_todo))
+        .route(
+            "/todos/:id",
+            get(get_todo).patch(update_todo).delete(delete_todo),
+        )
         .with_state(state);
 
     let addr: SocketAddr = "127.0.0.1:3000".parse()?;
