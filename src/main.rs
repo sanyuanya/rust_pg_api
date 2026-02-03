@@ -89,7 +89,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         )
         .with_state(state);
 
-    let addr: SocketAddr = "127.0.0.1:3000".parse()?;
+    let addr: SocketAddr = "0.0.0.0:3000".parse()?;
     tracing::info!(%addr, "listening");
 
     axum::serve(tokio::net::TcpListener::bind(addr).await?, app).await?;
